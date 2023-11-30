@@ -1,0 +1,65 @@
+<%- include("./layout/head", {title:"Home"})%>
+<%- include("./layout/header")%>
+<%- include("./layout/menu")%>
+<%- include("./layout/slider")%>
+
+<body>
+        <div id="my-cart">
+            <%if(cart.length < 1) {%>
+                <h3>Bạn chưa có sản phẩm nào trong giỏ hàng !</h3>
+            <%} else {%>
+                <h3>Giỏ hàng của bạn</h3>
+                <div class="row">
+                    <div class="cart-nav-item col-lg-6 col-md-6 col-sm-12">Thông tin sản phẩm</div> 
+                    <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Số lượng</div> 
+                    <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>    
+                </div>  
+                <form method="post" action="/update-cart">
+                    <%for(item of cart) {%>
+                        <div class="cart-item row">
+                            <div class="cart-thumb col-lg-6 col-md-6 col-sm-12">
+                                <img src="../images/<%=item.img%>">
+                                <h4><%=item.name%></h4>
+                                <li>Tác giả : <span><%=item.author%></span></li>
+                                <li>Loại : <span><%=item.cat_id%></span></li>
+                            </div> 
+                            
+                            <div class="cart-quantity col-lg-3 col-md-3 col-sm-12">         
+                                <input name="products[<%=item.id%>][qty]" type="number" class="form-control form-blue quantity" value="<%=item.qty%>" min="1">
+                            </div>
+                            <%if(item.sale > 0) {%> 
+                                <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><%=parseInt(item.qty*item.price).toLocaleString('en-us')%>đ</b><a href="/remove-cart-<%=item.id%>">Xóa</a></div>   
+                            <%} else { %>
+                                <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><%=parseInt(item.qty*item.salePrice).toLocaleString('en-us')%>đ</b><a href="/remove-cart-<%=item.id%>">Xóa</a></div> 
+                            <%}%>
+                        </div>  
+                    <%}%>
+                
+                    <div class="row">
+                        <div class="cart-thumb col-lg-6 col-md-6 col-sm-12">
+                            <button id="update-cart" class="btn btn-primary" type="submit" name="sbm">Cập nhật giỏ hàng</button>
+                            <a href="/order" class="btn btn-success">Đặt hàng ngay</a>	
+                        </div> 
+                        <div class="cart-total col-lg-3 col-md-3 col-sm-12"><b>Tổng cộng:</b></div> 
+                        <div class="cart-price col-lg-3 col-md-3 col-sm-12">
+                            <b>
+                                <%=parseInt(cart.reduce((total, item) => {
+                                    if(item.salePrice > 0) {
+                                        return total +item.qty*item.salePrice
+                                    } else {
+                                        return total +item.qty*item.price
+                                    }                                
+                                }, 0)).toLocaleString('en-us')%>đ
+                            </b>
+                        </div>
+                    </div>
+                </form>       
+            <%}%>
+        </div>
+    </div>
+</div>
+    
+    <%- include("./layout/footer")%>
+
+</body>
+</html>

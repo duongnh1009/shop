@@ -1,0 +1,36 @@
+<div id="header">
+    <div class="container">
+        <div class="row center">
+            <div id="logo" class="col-lg-2 col-md-2 col-sm-12">
+                <%for(logo of logos) {%>
+                    <h1>
+                        <a href="/"><img class="image" src="/static/images/<%=logo.img_banner%>" alt=""></a>
+                    </h1>
+                <%}%>
+            </div>
+
+            <div id="search" class="col-lg-6 col-md-6 col-sm-12">
+                <form action="/search">
+                    <input name="keyword" class="search-content" type="text" placeholder="Tìm kiếm...">
+                    <button class="search-button" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div id="login" class="col-lg-2 col-md-2 col-sm-12">
+                <ul class="row">
+                    <li><a href="/login">Đăng nhập/</a></li>
+                    <li><a href="/register">Đăng kí</a></li>
+                </ul>
+            </div>
+
+            <div id="cart" class="col-lg-2 col-md-2 col-sm-12">
+                <a class="cart-icon" href="/cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+                <span><%=totalCart%></span>
+            </div>
+        </div>
+    </div>
+</div>

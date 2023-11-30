@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>
+        <b>Khách hàng:</b> <%=name%><br>
+        <b>Điện thoại:</b> <%=phone%><br>
+        <b>Email:</b> <%=mail%><br>
+        <b>Địa chỉ:</b> <%=address%><br>
+    </p>
+
+    <table border="1" cellspacing="0" cellpadding="10" bordercolor="#305eb3" width="100%">
+        <tr bgcolor="#305eb3">
+            <td width="70%"><b><font color = #ffffff>Sản phẩm</font></b></td>
+            <td width="10%"><b><font color = #ffffff>Số lượng</font></b></td>
+            <td width="20%"><b><font color = #ffffff>Tổng tiền</font></b></td>
+        </tr>
+
+        <%for (item of items) {%>
+            <tr>
+                <td width="70%"><%=item.name%></td>
+                <td width="10%"><%=item.qty%></td>
+                <%if(item.salePrice > 0) {%>
+                    <td width="20%">
+                        <%=parseInt(item.qty*item.salePrice).toLocaleString('en-us')%> đ
+                    </td>
+                <%} else {%>
+                    <td width="20%">
+                        <%=parseInt(item.qty*item.price).toLocaleString('en-us')%> đ
+                    </td>
+                <%}%>
+            </tr>
+        <%}%>
+
+        <tr>
+            <td colspan="2" width="70%"></td>
+            <td width="20%">
+                <b>
+                    <font color = #ff0000>
+                        <%=parseInt(items.reduce((total, item) => {
+                            if(item.salePrice > 0) {
+                                return total +item.qty*item.salePrice
+                            } else {
+                                return total +item.qty*item.price
+                            }     
+                        }, 0)).toLocaleString('en-us')%> đ
+                    </font>
+                </b>
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        Cảm ơn bạn đã ủng hộ Shop, chúng tôi sẽ giao hàng cho bạn sớm nhất có thể, chúc bạn một ngày tốt lành.
+    </p>
+</body>
+</html>
