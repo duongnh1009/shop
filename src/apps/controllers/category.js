@@ -126,17 +126,15 @@ const remove = async (req, res) => {
 
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
-    const filter = {};
-    if(keyword) {
-        filter.$text = {
-            $search: keyword,
-        }
-    }
-    const categories = await categoryModel.find(filter);
+    const searchCategory = await categoryModel.find({
+        $or: [
+            { title: { $regex: new RegExp(keyword, 'i') } },
+        ],
+    })
     const categoryRemove = await categoryModel.countWithDeleted({
         deleted: true
     });
-    res.render("admin/category/search-category", {categories, categoryRemove})
+    res.render("admin/category/search-category", {searchCategory, categoryRemove})
 }
 
 module.exports = {

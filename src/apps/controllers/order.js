@@ -205,13 +205,12 @@ const removeDelivered = async (req, res) => {
 
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
-    const filter = {};
-    if(keyword) {
-        filter.$text = {
-            $search: keyword,
-        }
-    }
-    const orders = await orderModel.find(filter);
+    const searchOrders = await orderModel.find({
+        $or: [
+            { name: { $regex: new RegExp(keyword, 'i') } },
+            { phone: { $regex: new RegExp(keyword, 'i') } },
+        ],
+    })
     const total = await orderModel.find({
         status: 'Đang chuẩn bị'
     })
@@ -225,7 +224,7 @@ const search = async (req, res) => {
     })
 
     res.render("admin/order/search-order", {
-        orders, 
+        searchOrders, 
         moment, 
         total: total.length, 
         totalTransport: totalTransport.length,

@@ -156,17 +156,17 @@ const force = async (req, res) => {
 
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
-    const filter = {};
-    if(keyword) {
-        filter.$text = {
-            $search: keyword,
-        }
-    }
-    const users = await userModel.find(filter);
+    const searchUsers = await userModel.find({
+        $or: [
+            { fullName: { $regex: new RegExp(keyword, 'i') } },
+            { email: { $regex: new RegExp(keyword, 'i') } },
+            { role: { $regex: new RegExp(keyword, 'i') } },
+        ],
+    })
     const userRemove = await userModel.countWithDeleted({
         deleted: true
     });
-    res.render("admin/users/search-user", {users, userRemove})
+    res.render("admin/users/search-user", {searchUsers, userRemove})
 }
 
 module.exports = {

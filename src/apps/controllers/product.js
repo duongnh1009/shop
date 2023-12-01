@@ -191,16 +191,39 @@ const remove = async (req, res) => {
 
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
+    const page = parseInt(req.query.page) || 1;
+    const limit = 6;
+    const skip = page*limit - limit;
+    const total = await productModel.find({
+        $or: [
+            { name: { $regex: new RegExp(keyword, 'i') } },
+            { cat_id: { $in: await categoryModel.find({ title: { $regex: new RegExp(keyword, 'i') } }).distinct('_id') } },
+        ],
+    });
+    const totalPages = Math.ceil(total.length/limit);
+    const next = page + 1;
+    const prev = page - 1;
+    const hasNext = page < totalPages ? true : false;
+    const hasPrev = page > 1 ? true : false;
     const products = await productModel.find({
         $or: [
             { name: { $regex: new RegExp(keyword, 'i') } },
             { cat_id: { $in: await categoryModel.find({ title: { $regex: new RegExp(keyword, 'i') } }).distinct('_id') } },
         ],
-    }).sort({_id: -1}).populate({path: "cat_id"});
+    }).sort({_id: -1}).populate({path: "cat_id"}).skip(skip).limit(limit)
     const productRemove = await productModel.countWithDeleted({
         deleted: true
     });
-    res.render("admin/products/search-product", {products, productRemove})
+    res.render("admin/products/search-product", {
+        products, 
+        productRemove,
+        page,
+        next,
+        prev,
+        hasNext,
+        hasPrev,
+        pages: pagination(page, totalPages)
+    })
 }
 
 module.exports = {
