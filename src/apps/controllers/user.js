@@ -156,17 +156,42 @@ const force = async (req, res) => {
 
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
-    const searchUsers = await userModel.find({
+    const page = parseInt(req.query.page) || 1;
+    const limit = 6;
+    const skip = page*limit - limit;
+    const total = await userModel.find({
         $or: [
             { fullName: { $regex: new RegExp(keyword, 'i') } },
             { email: { $regex: new RegExp(keyword, 'i') } },
             { role: { $regex: new RegExp(keyword, 'i') } },
         ],
     })
+    const totalPages = Math.ceil(total.length/limit);
+    const next = page + 1;
+    const prev = page - 1;
+    const hasNext = page < totalPages ? true : false;
+    const hasPrev = page > 1 ? true : false;
+    const searchUsers = await userModel.find({
+        $or: [
+            { fullName: { $regex: new RegExp(keyword, 'i') } },
+            { email: { $regex: new RegExp(keyword, 'i') } },
+            { role: { $regex: new RegExp(keyword, 'i') } },
+        ],
+    }).skip(skip).limit(limit)
     const userRemove = await userModel.countWithDeleted({
         deleted: true
     });
-    res.render("admin/users/search-user", {searchUsers, userRemove})
+    res.render("admin/users/search-user", {
+        searchUsers, 
+        userRemove,
+        keyword,
+        page,
+        next,
+        hasNext,
+        prev,
+        hasPrev,
+        pages: pagination(page, totalPages)
+    })
 }
 
 module.exports = {

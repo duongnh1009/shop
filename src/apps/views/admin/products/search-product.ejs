@@ -7,13 +7,13 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">Danh sách sản phẩm</li>
+				<li class="active">Tìm kiếm sản phẩm</li>
 			</ol>
 		</div><!--/.row-->
 		
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Danh sách sản phẩm</h1>
+				<h3 class="page-header">Kết quả tìm kiếm với sản phẩm <span>" <%=keyword%> "</span></h3>
 			</div>
 		</div><!--/.row-->
 		<div id="toolbar" class="toolbar-item">
@@ -75,19 +75,19 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <%if(hasPrev) {%>
-                                    <li class="page-item"><a class="page-link" href="/admin/search/product?page=<%=prev%>">&laquo;</a></li>
+                                    <li class="page-item"><a class="page-link" href="/admin/search/product?keyword=<%= keyword%>&page=<%=prev%>">&laquo;</a></li>
                                 <%}%>
                                 
                                 <%for(i of pages) {%>
                                     <%if(i === "...") {%>
                                         <li class="page-item"><span class="page-link"><%=i%></span></li>
                                     <%} else {%>
-                                        <li class="page-item <%= page===i?'active':''%>"><a class="page-link" href="/admin/search/product?page=<%=i%>"><%=i%></a></li>
+                                        <li class="page-item <%= page===i?'active':''%>"><a class="page-link" href="/admin/search/product?keyword=<%= keyword%>&page=<%=i%>"><%=i%></a></li>
                                     <%}%>
                                 <%}%>
 
                                 <%if(hasNext) {%>
-                                    <li class="page-item"><a class="page-link" href="/admin/search/product?page=<%=next%>">&raquo;</a></li>
+                                    <li class="page-item"><a class="page-link" href="/admin/search/product?keyword=<%= keyword%>&page=<%=next%>">&raquo;</a></li>
                                 <%}%>
                             </ul>
                         </nav>

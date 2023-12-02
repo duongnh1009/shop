@@ -217,6 +217,7 @@ const search = async (req, res) => {
     res.render("admin/products/search-product", {
         products, 
         productRemove,
+        keyword,
         page,
         next,
         prev,
