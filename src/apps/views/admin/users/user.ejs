@@ -59,8 +59,12 @@
                                         <td><%=user.email%></td>
                                         <td><span class="label label-<%=user.role==='Admin'?'success':'danger'%>"><%=user.role%></span></td>
                                         <td class="form-group">
-                                            <a href="/admin/user/edit/<%=user._id%>" class="btn btn-primary">Thay đổi</a>
-                                            <a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+											<%if(user.role === "Admin") {%>
+												<a href="/admin/user/edit/<%=user._id%>" class="btn btn-primary">Thay đổi</a>
+												<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+											<%} else { %>
+												<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+											<%}%>
                                         </td>
                                     </tr>
                                 <%}%>

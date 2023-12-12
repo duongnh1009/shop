@@ -9,15 +9,27 @@ const postLogin = async (req, res) => {
     const {email, password} = req.body;
     let error = '';
     const user = await userModel.findOne({ email });
-    if (user && await bcryptjs.compare(password, user.password)) {
-        req.session.user = { email: user.email, role: user.role };
-        res.redirect('/admin/dashboard');
-    } 
-
-    else {
-        error = 'Tài khoản hoặc mật khẩu không chính xác !'
-        res.render("admin/login", {error});
+    if (!user) {
+        error = "Tài khoản không tồn tại !"
+        return res.render("admin/login", {error});
     }
+
+    else if(!(await bcryptjs.compare(password, user.password))) {
+        error = "Mật khẩu không chính xác !"
+        return res.render("admin/login", {error});
+    }
+
+    //luu thong tin tai khoan vao session
+    req.session.userId = user._id;
+    req.session.fullName = user.fullName;
+    req.session.role = user.role;
+
+    //kiem tra quyen truy cap cua tai khoan
+    if(req.session.role !== "Admin") {
+        error = "Tài khoản không có quyền truy cập !"
+        return res.render("admin/login", {error});
+    }
+    res.redirect('/admin/dashboard');
 }
 
 const logout = (req, res) => {

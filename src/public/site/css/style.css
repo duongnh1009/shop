@@ -39,14 +39,22 @@
     margin: 15px 0px;
 }
 
-#login ul li {
+#login .login-back li {
     list-style: none;
 }
 
-#login ul li a {
+#login .login-back li a {
     text-decoration: none;
     color: black;
     font-size: 15px;
+}
+ 
+#login-menu {
+    margin-top: -15px;    
+}
+
+#login-menu a {
+    color: #333333;
 }
 
 #cart {

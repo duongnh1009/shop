@@ -6,7 +6,6 @@ const index = async (req, res) => {
     const products = (await productModel.find()).length;
     res.render("admin/dashboard", {users, products})
 }
-
 module.exports = {
     index
 }

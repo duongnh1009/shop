@@ -47,9 +47,6 @@ const create = (req, res) => {
 
 const store = async (req, res) => {
     const {email, password, password_retype, fullName, role} = req.body;
-    const sHashSalt = bcryptjs.genSaltSync(16);
-    const sPassword = bcryptjs.hashSync(password, sHashSalt)
-    const sPasswordretype = bcryptjs.hashSync(password_retype, sHashSalt)
     let error = '';
 
     const users = await userModel.findOne({
@@ -61,10 +58,13 @@ const store = async (req, res) => {
         return validator.isEmail(email);
     }
 
+    //ma hoa mat khau
+    const sHashSalt = bcryptjs.genSaltSync(16);
+    const sPassword = bcryptjs.hashSync(password, sHashSalt)
+
     const user = {
        email,
        password: sPassword,
-       password_retype: sPasswordretype,
        fullName,
        role
     }
@@ -81,7 +81,7 @@ const store = async (req, res) => {
         error = "Mật khẩu tối thiểu 6 kí tự !"
     }
     
-    else if(user.password_retype !== user.password) {
+    else if(password !== password_retype) {
         error = "Mật khẩu nhập lại không đúng !"
     }
 
@@ -102,26 +102,31 @@ const edit = async (req, res) => {
 
 const update = async (req, res) => {
     const id = req.params.id;
-    const {password, password_retype, role} = req.body;
-    const sHashSalt = bcryptjs.genSaltSync(16);
-    const sPassword = bcryptjs.hashSync(password, sHashSalt)
-    const sPasswordretype = bcryptjs.hashSync(password_retype, sHashSalt)
+    const { currentPassword, newPassword, confirmPassword, role } = req.body;
     let error = ''
+
     const user = await userModel.findOne({
         _id: req.params.id
     })
 
+    //ma hoa mat khau
+    const sHashSalt = bcryptjs.genSaltSync(16);
+    const sPassword = bcryptjs.hashSync(newPassword, sHashSalt)
+
     const users = {
         password: sPassword,
-        password_retype: sPasswordretype,
         role
     }
 
-    if(password.length < 6) {
+    if (!user || !(await bcryptjs.compare(currentPassword, user.password))) {
+        error = "Mật khẩu cũ không chính xác !"
+    }
+
+    else if(newPassword.length < 6) {
         error = "Mật khẩu tối thiểu 6 kí tự !"
     }
 
-    else if(users.password_retype !== users.password) {
+    else if(newPassword !== confirmPassword) {
         error = 'Mật khẩu nhập lại không đúng !'
     }
 

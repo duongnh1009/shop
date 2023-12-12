@@ -25,7 +25,7 @@ const orderSchema = mongoose.Schema({
 
     items: {
         type: Object
-    }
+    },
 }, {
     timestamps: true
 })

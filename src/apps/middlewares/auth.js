@@ -1,21 +1,32 @@
-const userModel = require("../models/user")
-const checkAdmin = (req, res, next) => {
-    if (req.session && req.session.user) {
-            // Kiểm tra xác thực từ cơ sở dữ liệu
-            userModel.findOne({ email: req.session.user.email }, (err, user) => {
-            if (user && user.role === 'Admin') {
-                // Nếu người dùng là admin, cho phép tiếp tục
-                next();
-            } else {
-                // Nếu không có quyền, chuyển hướng về trang đăng nhập hoặc trang lỗi
-                res.redirect('/admin/login');
-            }
-        });
+// Middleware kiểm tra đăng nhập và phân quyền
+const checkLogin = (req, res, next) => {
+    if (req.session.userId) {
+        res.locals.fullName = req.session.fullName
+        next();
     } else {
-        res.redirect('/admin/login');
+        return res.redirect("/admin/login");
     }
-}
+};
 
+// Middleware kiểm tra đăng nhập bên client
+const checkLoginSite = (req, res, next) => {
+    if (req.session.userSiteId) {
+      res.locals.fullName = req.session.fullName; // Lưu tên người dùng vào locals
+    } else {
+      res.locals.fullName = null;
+    }
+    next();
+};
+
+const backLogin = (req, res, next) => {
+    if (!req.session.userSiteId) {
+      return res.redirect('/login');
+    }
+    next();
+};
+  
 module.exports = {
-    checkAdmin
+    checkLogin,
+    checkLoginSite,
+    backLogin
 }

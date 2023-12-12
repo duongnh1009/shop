@@ -1,7 +1,10 @@
 const ejs = require("ejs");
 const path = require("path");
+const bcryptjs = require("bcryptjs")
+const validator = require("validator")
 const productModel = require("../models/product");
 const categoryModel = require("../models//category");
+const userModel = require("../models/user")
 const orderModel = require("../models/order");
 const transporter = require("../../common/transporter");
 const pagination = require("../../common/pagination");
@@ -161,6 +164,121 @@ const removeCart = (req, res) => {
     res.redirect("/cart")
 }
 
+const login = (req, res) => {
+    let error = '';
+    res.render("site/login", {error})
+}
+
+const postLogin = async(req, res) => {
+    const {email, password} = req.body;
+    let error = '';
+    const user = await userModel.findOne({ email });
+    if (!user) {
+        error = "Tài khoản không tồn tại !"
+        return res.render("site/login", {error});
+    }
+
+    else if(!(await bcryptjs.compare(password, user.password))) {
+        error = "Mật khẩu không chính xác !"
+        return res.render("site/login", {error});
+    }
+
+    //luu thong tin tai khoan vao session
+    req.session.userSiteId = user._id;
+    req.session.fullName = user.fullName;
+    res.redirect('/');
+}
+
+const logout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
+} 
+
+const register = (req, res) => {
+    let error = ''
+    res.render("site/register", {error})
+}
+
+const registerStore = async(req, res) => {
+    const {email, password, password_retype, fullName} = req.body;
+    let error = '';
+
+    const users = await userModel.findOne({
+        email: {$regex: new RegExp("^" + email + "$", "i")}
+    })
+
+    //kiem tra dinh dang email
+    function isValidEmail(email) {
+        return validator.isEmail(email);
+    }
+
+    //ma hoa mat khau
+    const sHashSalt = bcryptjs.genSaltSync(16);
+    const sPassword = bcryptjs.hashSync(password, sHashSalt)
+
+    const user = {
+       email,
+       password: sPassword,
+       fullName,
+    }
+
+    if(users) {
+        error = 'Email đã tồn tại !'
+    }
+
+    else if(!isValidEmail(email)) {
+        error = "Không đúng định dạng email !"
+    }
+
+    else if(password.length<6) {
+        error = "Mật khẩu tối thiểu 6 kí tự !"
+    }
+    
+    else if(password !== password_retype) {
+        error = "Mật khẩu nhập lại không đúng !"
+    }
+
+    else {
+        new userModel(user).save();
+        req.flash('success', 'Đăng kí thành công !');
+        res.redirect("/register")
+    }
+    res.render("site/register", {error})
+}
+
+const changePassword = (req, res) => {
+    let error = ''
+    res.render("site/changePassword", {error})
+}
+
+const updatePass = async(req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    let error = ''
+    const user = await userModel.findById(req.session.userSiteId);
+    if (!user || !(await bcryptjs.compare(currentPassword, user.password))) {
+        error = "Mật khẩu cũ không chính xác !"
+    }
+
+    else if(newPassword.length < 6) {
+        error = "Mật khẩu tối thiểu 6 kí tự !"
+    }
+
+    else if (newPassword !== confirmPassword) {
+        error = "Mật khẩu nhập lại không chính xác !"
+    }
+
+    else {
+        const sHashSalt = bcryptjs.genSaltSync(16);
+        const sNewPassword = bcryptjs.hashSync(newPassword, sHashSalt)
+        user.password = sNewPassword;
+        await user.save();
+        req.flash('success', 'Đổi mật khẩu thành công !');
+        res.redirect('/changePassword')
+    }
+    return res.render('site/changePassword', {error});
+}
+
 const order = (req, res) => {
     res.render("site/order")
 }
@@ -173,7 +291,8 @@ const orderBuy = async (req, res) => {
         phone,
         mail,
         address,
-        items
+        userSiteId: req.session.userSiteId,
+        items,
     }
     new orderModel(orderList).save();
     
@@ -202,13 +321,6 @@ const success = (req, res) => {
     res.render("site/success")
 }
 
-const login = (req, res) => {
-    res.render("site/login")
-}
-
-const register = (req, res) => {
-    res.render("site/register")
-}
 
 module.exports = {
     home,
@@ -219,9 +331,14 @@ module.exports = {
     cart,
     updateCart,
     removeCart,
+    login,
+    postLogin,
+    logout,
+    register,
+    registerStore,
+    changePassword,
+    updatePass,
     order,
     orderBuy,
     success,
-    login, 
-    register
 }
