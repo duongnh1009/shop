@@ -1,6 +1,6 @@
 const moment = require("moment");
-const orderModel = require("../models/order");
-const pagination = require("../../common/pagination");
+const orderModel = require("../../models/order");
+const pagination = require("../../../common/pagination");
 
 const index = async (req, res) => {
     const page = parseInt(req.query.page) || 1;

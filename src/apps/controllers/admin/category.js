@@ -1,6 +1,6 @@
 const slug = require("slug")
-const categoryModel = require("../models/category");
-const pagination = require("../../common/pagination");
+const categoryModel = require("../../models/category");
+const pagination = require("../../../common/pagination");
 const index = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 6;

@@ -2,16 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 //khai bao router admin
-const authController = require('../apps/controllers/auth');
-const adminController = require('../apps/controllers/admin');
-const productController = require('../apps/controllers/product');
-const categoryController = require("../apps/controllers/category");
-const userController = require("../apps/controllers/user");
-const bannerController = require("../apps/controllers/banner");
-const orderController = require("../apps/controllers/order")
+const authController = require("../apps/controllers/admin/auth")
+const adminController = require('../apps/controllers/admin/admin');
+const productController = require('../apps/controllers/admin/product');
+const categoryController = require("../apps/controllers/admin/category");
+const userController = require("../apps/controllers/admin/user");
+const bannerController = require("../apps/controllers/admin/banner");
+const orderController = require("../apps/controllers/admin/order")
 
 //khai bao router site
-const siteController = require("../apps/controllers/site")
+const authSiteController = require("../apps/controllers/site/auth")
+const homeController = require("../apps/controllers/site/home")
+const categorySiteController = require("../apps/controllers/site/category")
+const productSiteController = require("../apps/controllers/site/product")
+const commentSiteController = require("../apps/controllers/site/comment")
+const cartSiteSController = require("../apps/controllers/site/cart")
+const orderSiteController = require("../apps/controllers/site/order")
+const searchSiteController = require("../apps/controllers/site/search")
+const successSiteController = require("../apps/controllers/site/success")
 
 //middleware
 const authMiddleware = require("../apps/middlewares/auth")
@@ -89,29 +97,29 @@ router.delete('/admin/order/force/:id',authMiddleware.checkLogin, orderControlle
 router.get('/admin/search/order',authMiddleware.checkLogin, orderController.search),
 
 //router site
-router.get("/",authMiddleware.checkLoginSite, siteController.home);
-router.get("/category-:slug.:id",authMiddleware.checkLoginSite, siteController.category)
-router.get("/product-:slug.:id",authMiddleware.checkLoginSite, siteController.product)
-router.post("/product-:slug.:id",authMiddleware.checkLoginSite, siteController.comment)
-router.get("/search",authMiddleware.checkLoginSite, siteController.search)
-router.post("/add-to-cart",authMiddleware.checkLoginSite, siteController.addToCart)
-router.get("/cart",authMiddleware.checkLoginSite, siteController.cart)
-router.post("/update-cart",authMiddleware.checkLoginSite, siteController.updateCart)
-router.get("/remove-cart-:id",authMiddleware.checkLoginSite, siteController.removeCart)
-router.get("/login", siteController.login);
-router.post("/login", siteController.postLogin);
-router.get('/logout', siteController.siteLogout)
-router.get("/register", siteController.register);
-router.post("/register", siteController.registerStore);
-router.get("/changePassword", siteController.changePassword);
-router.post("/changePassword", siteController.updatePass);
-router.get("/forgotPassword", siteController.forgotPass);
-router.post("/forgotPassword", siteController.forgotCode);
-router.get("/resetPassword-:token", siteController.resetPass);
-router.post("/resetPassword-:token", siteController.resetUpdate);
-router.get("/order",authMiddleware.checkLoginSite, authMiddleware.backLogin, siteController.order)
-router.post("/order-buy", siteController.orderBuy)
-router.get("/success",authMiddleware.checkLoginSite, authMiddleware.backLogin, siteController.success)
-router.get("/orderUser",authMiddleware.checkLoginSite, authMiddleware.backLogin, siteController.orderUser)
+router.get("/",authMiddleware.checkLoginSite, homeController.home);
+router.get("/category-:slug.:id",authMiddleware.checkLoginSite, categorySiteController.category)
+router.get("/product-:slug.:id",authMiddleware.checkLoginSite, productSiteController.product)
+router.post("/product-:slug.:id",authMiddleware.checkLoginSite, commentSiteController.comment)
+router.get("/search",authMiddleware.checkLoginSite, searchSiteController.search)
+router.post("/add-to-cart",authMiddleware.checkLoginSite, cartSiteSController.addToCart)
+router.get("/cart",authMiddleware.checkLoginSite, cartSiteSController.cart)
+router.post("/update-cart",authMiddleware.checkLoginSite, cartSiteSController.updateCart)
+router.get("/remove-cart-:id",authMiddleware.checkLoginSite, cartSiteSController.removeCart)
+router.get("/login", authSiteController.login);
+router.post("/login", authSiteController.postLogin);
+router.get('/logout', authSiteController.Logout)
+router.get("/register", authSiteController.register);
+router.post("/register", authSiteController.registerStore);
+router.get("/changePassword", authSiteController.changePassword);
+router.post("/changePassword", authSiteController.updatePass);
+router.get("/forgotPassword", authSiteController.forgotPass);
+router.post("/forgotPassword", authSiteController.forgotCode);
+router.get("/resetPassword-:token", authSiteController.resetPass);
+router.post("/resetPassword-:token", authSiteController.resetUpdate);
+router.get("/order",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.order)
+router.post("/order-buy", orderSiteController.orderBuy)
+router.get("/orderUser",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.orderUser)
+router.get("/success",authMiddleware.checkLoginSite, authMiddleware.backLogin, successSiteController.success)
 
 module.exports = router;

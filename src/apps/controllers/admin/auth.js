@@ -1,4 +1,4 @@
-const userModel = require("../models/user")
+const userModel = require("../../models/user")
 const bcryptjs = require("bcryptjs")
 const getLogin = async (req, res) => {
     let error = '';

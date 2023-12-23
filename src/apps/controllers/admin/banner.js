@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path")
-const bannerModel = require("../models/banner");
-const pagination = require("../../common/pagination");
+const bannerModel = require("../../models/banner");
+const pagination = require("../../../common/pagination");
 const index = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 6;

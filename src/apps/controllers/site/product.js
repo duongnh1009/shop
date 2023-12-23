@@ -1,0 +1,33 @@
+const moment = require("moment")
+const productModel = require("../../models/product")
+const commentModel = require("../../models/comment")
+
+const product = async (req, res) => {
+    const id = req.params.id;
+    const userSiteId = req.session.userSiteId;
+    const productById = await productModel.findById(id);
+    const comments = await commentModel.find({prd_id: id}).sort({_id: -1});
+
+    //hien thi san pham cung danh muc
+    const products = await productModel.find({
+        is_stock: "Còn hàng",
+        cat_id: productById.cat_id,
+        _id: {
+            $ne: productById.id
+        }
+    }).limit(8)
+
+    //hien thi san pham cung tac gia
+    const authors = await productModel.find({
+        is_stock: "Còn hàng",
+        author: productById.author,
+        _id: {
+            $ne: productById.id
+        }
+    })
+    res.render("site/product", {productById, comments, products, authors, moment, userSiteId})
+}
+
+module.exports = {
+    product
+}

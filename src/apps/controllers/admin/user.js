@@ -1,7 +1,7 @@
 const validator = require("validator")
 const bcryptjs = require("bcryptjs")
-const userModel = require("../models/user")
-const pagination = require("../../common/pagination")
+const userModel = require("../../models/user")
+const pagination = require("../../../common/pagination")
 
 const index = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
