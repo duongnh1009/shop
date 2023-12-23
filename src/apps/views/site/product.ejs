@@ -62,6 +62,37 @@
                 <p><%-productById.description%></p>
             </div>
 
+            <div class="product-comment col-lg-12">
+                <%if(!userSiteId) { %>
+                    <h3>Bình luận sản phẩm (bạn cần đăng nhập !)</h3>
+                <%} else { %>
+                    <h3>Bình luận sản phẩm</h3>
+                    <form method="post">
+                        <div class="form-group">
+                            <label>Nội dung:</label>
+                            <textarea name="content" required rows="8" class="form-control"></textarea>     
+                        </div>
+                        <button type="submit" name="sbm" class="btn btn-primary">Gửi</button>
+                    </form> 
+                <%}%>
+            </div>
+
+            <div class="product-commentList col-md-12 col-sm-12">
+                <%if(comments.length===0) { %>
+                    <p>Chưa có bình luận nào !</p>
+                <%} else { %>
+                    <%for(comment of comments) { %>
+                        <div class="comment-item">
+                            <div>
+                                <p class="comment-fullName"><%=comment.fullNameSite%></p>
+                                <p><%=moment(comment.createdAt).format('DD/MM/YYYY')%></p>
+                                <p><%=comment.content%></p>
+                            </div> 
+                        </div>
+                    <%}%>
+                <%}%>
+            </div>
+
             <%if(authors.length>0) {%>
                 <div style="margin-top: 40px;" id="products" class="col-lg-12">
                     <h3>Cùng tác giả</h3>

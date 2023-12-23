@@ -71,7 +71,7 @@ const productSchema = mongoose.Schema({
 
     is_stock: {
         type: String,
-    }
+    },
 }, {
     timestamps: true
 })

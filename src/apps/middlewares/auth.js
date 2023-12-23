@@ -11,9 +11,9 @@ const checkLogin = (req, res, next) => {
 // Middleware kiểm tra đăng nhập bên client
 const checkLoginSite = (req, res, next) => {
     if (req.session.userSiteId) {
-      res.locals.fullName = req.session.fullName; // Lưu tên người dùng vào locals
+      res.locals.fullNameSite = req.session.fullNameSite; // Lưu tên người dùng vào locals
     } else {
-      res.locals.fullName = null;
+      res.locals.fullNameSite = null;
     }
     next();
 };

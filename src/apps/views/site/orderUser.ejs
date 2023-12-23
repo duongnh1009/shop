@@ -1,0 +1,44 @@
+<%- include("./layout/head", {title:"Home"})%>
+<%- include("./layout/header")%>
+<%- include("./layout/menu")%>
+<%- include("./layout/slider")%>
+
+<body>
+        <div id="my-cart">
+            <%if(orders.length < 1) {%>
+                <h3>Bạn chưa mua sản phẩm nào !</h3>
+            <%} else {%>
+                <h3>Đơn hàng của bạn</h3>
+                <div class="row">
+                    <div class="cart-nav-item col-lg-9 col-md-9 col-sm-12">Thông tin sản phẩm</div> 
+                    <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>    
+                </div>  
+                
+                    <% orders.forEach(order => { %>
+                        <% order.items.forEach(item => { %>
+                            <div class="cart-item row">
+                                <div class="cart-thumb col-lg-9 col-md-6 col-sm-12">
+                                    <img src="../images/<%=item.img%>">
+                                    <h4><%=item.name%></h4>
+                                    <li>Tác giả : <span><%=item.author%></span></li>
+                                    <li>Loại : <span><%=item.cat_id%></span></li>
+                                    <li>Số lượng : <span><%=item.qty%></span></li>
+                                </div> 
+                                
+                                <%if(item.sale > 0) {%> 
+                                    <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><%=parseInt(item.qty*item.price).toLocaleString('en-us')%>đ</b></div>   
+                                <%} else { %>
+                                    <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><%=parseInt(item.qty*item.salePrice).toLocaleString('en-us')%>đ</b></div> 
+                                <%}%>
+                            </div>  
+                        <% }) %>
+                    <% }) %> 
+            <%}%>
+        </div>
+    </div>
+</div>
+    
+    <%- include("./layout/footer")%>
+
+</body>
+</html>

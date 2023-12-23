@@ -11,10 +11,6 @@ const userSchema = mongoose.Schema({
         type: String,
     },
 
-    password_retype: {
-        type: String,
-    },
-
     fullName: {
         type: String,
     },
@@ -23,6 +19,22 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "Member"
     },
+
+    resetPasswordToken: {
+        type: String
+    },
+
+    resetPasswordExpires: {
+        type: Date
+    },
+
+    isLocked: { 
+        type: Boolean, 
+        default: false 
+    },
+
+    sessionIds: [String],
+    
 }, {
     timestamps: true
 });

@@ -63,8 +63,26 @@
                                         <td><%=user.email%></td>
                                         <td><span class="label label-<%=user.role==='Admin'?'success':'danger'%>"><%=user.role%></span></td>
                                         <td class="form-group">
-                                            <a href="/admin/user/edit/<%=user._id%>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item"><i class="glyphicon glyphicon-remove"></i></a>
+											<%if(user.role === "Admin") {%>
+												<a href="/admin/user/edit/<%=user._id%>" class="btn btn-primary">Thay đổi</a>
+												<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+											<%} else { %>
+												<%if(!user.isLocked) {%>
+													<div style="display: flex;">
+														<form style="margin-right: 5px;" action="/admin/user/lockAccount/<%= user._id%>" method="post">
+															<button class="btn btn-primary" type="submit">Khóa tài khoản</button>
+														</form>
+														<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+													</div>
+												<%} else { %>
+													<div style="display: flex;">
+														<form style="margin-right: 5px;" action="/admin/user/unlockAccount/<%= user._id%>" method="post">
+															<button class="btn btn-success" type="submit">Mở tài khoản</button>
+														</form>
+														<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=user._id%>" data-target="#delete-item">Xóa</a>
+													</div>
+												<%}%>
+											<%}%>
                                         </td>
                                     </tr>
                                 <%}%>

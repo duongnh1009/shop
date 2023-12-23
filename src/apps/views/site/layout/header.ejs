@@ -19,15 +19,16 @@
             </div>
 
             <div id="login" class="col-lg-2 col-md-2 col-sm-12">
-                <%if(fullName) {%>
+                <%if(fullNameSite) {%>
                     <nav id="login-menu" class="navbar navbar-expand-lg">          
                         <div>
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <%=fullName%>
+                                    <%=fullNameSite%>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/orderUser">Đơn hàng của bạn</a>
                                     <a class="dropdown-item" href="/changePassword">Đổi mật khẩu</a>
                                     <a class="dropdown-item" href="/logout">Đăng xuất</a>
                                 </div>

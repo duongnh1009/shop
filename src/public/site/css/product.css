@@ -73,7 +73,7 @@
 }
 
 .product-information {
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .product-information li {
@@ -88,9 +88,30 @@
 }
 
 .product-intro {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .product-intro h3 {
     font-size: 20px;
+}
+
+.product-comment {
+    margin-top: 40px;
+}
+
+.product-comment h3 {
+    font-size: 20px;
+}
+
+.product-commentList {
+    margin-top: 20px;
+}
+
+.comment-fullName {
+    font-weight: 600;
+}
+
+.comment-item p:last-child {
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #333;
 }

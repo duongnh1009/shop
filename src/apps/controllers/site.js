@@ -1,11 +1,14 @@
 const ejs = require("ejs");
 const path = require("path");
+const moment = require("moment")
 const bcryptjs = require("bcryptjs")
 const validator = require("validator")
+const crypto = require("crypto")
 const productModel = require("../models/product");
 const categoryModel = require("../models//category");
 const userModel = require("../models/user")
 const orderModel = require("../models/order");
+const commentModel = require("../models/comment")
 const transporter = require("../../common/transporter");
 const pagination = require("../../common/pagination");
 
@@ -57,7 +60,10 @@ const category = async (req, res) => {
 
 const product = async (req, res) => {
     const id = req.params.id;
+    const userSiteId = req.session.userSiteId;
     const productById = await productModel.findById(id);
+    const comments = await commentModel.find({prd_id: id}).sort({_id: -1});
+
     //hien thi san pham cung danh muc
     const products = await productModel.find({
         is_stock: "Còn hàng",
@@ -66,6 +72,7 @@ const product = async (req, res) => {
             $ne: productById.id
         }
     }).limit(8)
+
     //hien thi san pham cung tac gia
     const authors = await productModel.find({
         is_stock: "Còn hàng",
@@ -74,7 +81,22 @@ const product = async (req, res) => {
             $ne: productById.id
         }
     })
-    res.render("site/product", {productById, products, authors})
+    res.render("site/product", {productById, comments, products, authors, moment, userSiteId})
+}
+
+const comment = async(req, res) => {
+    const prd_id = req.params.id;
+    const {content} = req.body;
+    const userSiteId = req.session.userSiteId;
+    const fullNameSite = req.session.fullNameSite;
+    const comments = {
+        prd_id,
+        userSiteId,
+        fullNameSite,
+        content
+    }
+    await new commentModel(comments).save();
+    res.redirect(req.path);
 }
 
 const search = async (req, res) => {
@@ -183,13 +205,18 @@ const postLogin = async(req, res) => {
         return res.render("site/login", {error});
     }
 
+    else if(user.isLocked) {
+        error = "Tài khoản của bạn đã bị khóa !";
+        return res.render("site/login", {error});
+    }
+
     //luu thong tin tai khoan vao session
     req.session.userSiteId = user._id;
-    req.session.fullName = user.fullName;
+    req.session.fullNameSite = user.fullName;
     res.redirect('/');
 }
 
-const logout = (req, res) => {
+const siteLogout = (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');
     });
@@ -279,6 +306,89 @@ const updatePass = async(req, res) => {
     return res.render('site/changePassword', {error});
 }
 
+const forgotPass = (req, res) => {
+    let error = ''
+    res.render("site/forgotPass", {error})
+}
+
+const forgotCode = async(req, res) => {
+    const { email } = req.body;
+    let error = '';
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+        error = 'Tài khoản không tồn tại !'
+    }
+
+    else {
+        // Tạo mã reset password
+        const token = crypto.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 giờ
+        await user.save();
+
+        // Gửi email reset password
+        const mailOptions = {
+            to: email,
+            from: 'D-SHOP',
+            subject: 'Yêu cầu reset mật khẩu từ D-SHOP',
+            text: `Vui lòng nhấp vào đường link sau để đổi mật khẩu, hoặc copy-paste nó vào trình duyệt để hoàn tất quá trình: http://${req.headers.host}/resetPassword-${token}.`,
+        };
+
+        await transporter.sendMail(mailOptions);
+        req.flash('success', 'Vui lòng kiểm tra email !');
+        res.redirect('/forgotPassword')
+    }
+    res.render("site/forgotPass", {error});
+}
+
+const resetPass = async(req, res) => {
+    let error = '';
+    const user = await userModel.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() },
+    });
+  
+    if (!user) {
+        return res.render('site/invalidToken');
+    }
+  
+    res.render('site/resetPass', {error, token: req.params.token });
+}
+
+const resetUpdate = async(req, res) => {
+    const { newPassword, confirmPassword } = req.body;
+    let error = '';
+    const user = await userModel.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return res.render('site/invalidToken');
+    }
+  
+    if(newPassword.length < 6) {
+        error = "Mật khẩu tối thiểu 6 kí tự !"
+    }
+
+    else if(newPassword !== confirmPassword) {
+        error = "Mật khẩu nhập lại không đúng !"
+    }
+
+    else {
+        // Cập nhật mật khẩu và xóa thông tin reset password
+        const sHashSalt = bcryptjs.genSaltSync(16);
+        const sPassword = bcryptjs.hashSync(newPassword, sHashSalt)
+        user.password = sPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+        res.render("site/passUpdate");
+    }
+    res.render("site/resetPass", {error})
+}
+
 const order = (req, res) => {
     res.render("site/order")
 }
@@ -321,11 +431,17 @@ const success = (req, res) => {
     res.render("site/success")
 }
 
+const orderUser = async(req, res) => {
+    const userSiteId = req.session.userSiteId; // Sử dụng session để lấy userSiteId
+    const orders = await orderModel.find({ userSiteId });
+    res.render('site/orderUser', { orders });
+}
 
 module.exports = {
     home,
     category,
     product,
+    comment,
     search,
     addToCart,
     cart,
@@ -333,12 +449,17 @@ module.exports = {
     removeCart,
     login,
     postLogin,
-    logout,
+    siteLogout,
     register,
     registerStore,
     changePassword,
     updatePass,
+    forgotPass,
+    forgotCode,
+    resetPass,
+    resetUpdate,
     order,
     orderBuy,
     success,
+    orderUser
 }

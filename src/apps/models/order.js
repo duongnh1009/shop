@@ -1,6 +1,10 @@
 const mongoose = require("../../common/database")();
 const mongooseDelete = require("mongoose-delete");
 const orderSchema = mongoose.Schema({
+    userSiteId: {
+        type: String
+    },
+
     name: {
         type: String,
         text: true

@@ -159,6 +159,34 @@ const force = async (req, res) => {
     res.redirect("/admin/user/trash")
 }
 
+const lockAccount = async(req, res) => {
+    const id = req.params.id;
+    let error = '';
+    const user = await userModel.findById(id);
+    if (!user) {
+        error = "Không tìm thấy tài khoản !"
+        return res.render("admin/users/user", {error})
+    }
+    user.isLocked = true;
+    await user.save();
+    req.flash('success', 'Đã khóa tài khoản !');
+    res.redirect('/admin/user');
+}
+
+const unlockAccount = async(req, res) => {
+    const id = req.params.id;
+    let error = '';
+    const user = await userModel.findById(id);
+    if (!user) {
+        error = "Không tìm thấy tài khoản !"
+        return res.render("admin/users/user", {error})
+    }
+    user.isLocked = false;
+    await user.save();
+    req.flash('success', 'Mở khóa tài khoản thành công !');
+    res.redirect('/admin/user');
+}
+
 const search = async (req, res) => {
     const keyword = req.query.keyword || '';
     const page = parseInt(req.query.page) || 1;
@@ -209,5 +237,7 @@ module.exports = {
     restore,
     remove,
     force,
+    lockAccount,
+    unlockAccount,
     search
 }
