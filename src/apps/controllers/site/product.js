@@ -4,7 +4,6 @@ const commentModel = require("../../models/comment")
 
 const product = async (req, res) => {
     const id = req.params.id;
-    const userSiteId = req.session.userSiteId;
     const productById = await productModel.findById(id);
     const comments = await commentModel.find({prd_id: id}).sort({_id: -1});
 
@@ -25,7 +24,7 @@ const product = async (req, res) => {
             $ne: productById.id
         }
     })
-    res.render("site/product", {productById, comments, products, authors, moment, userSiteId})
+    res.render("site/product", {productById, comments, products, authors, moment})
 }
 
 module.exports = {

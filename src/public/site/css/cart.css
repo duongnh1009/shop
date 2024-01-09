@@ -56,3 +56,12 @@
 .cart-price a:hover {
 	background:#FFF;
 }
+
+#order-user a {
+	color: #333333;
+}
+
+#order-user .order-a {
+	margin-left: -23px;
+}
+

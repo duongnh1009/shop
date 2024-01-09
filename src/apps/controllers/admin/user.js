@@ -13,7 +13,9 @@ const index = async (req, res) => {
     const prev = page - 1;
     const hasNext = page < totalPages ? true : false;
     const hasPrev = page > 1 ? true : false;
-    const users = await userModel.find()
+    const users = await userModel.find({
+        role: "Member"
+    })
     .sort({_id:-1})
     .skip(skip)
     .limit(limit)

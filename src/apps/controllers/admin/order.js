@@ -98,6 +98,7 @@ const transport = async (req, res) => {
     })
     res.render("admin/order/order-transport", {
         orders, 
+        moment,
         orderRemove,
         totalPrepare: totalPrepare.length, 
         totalDelive: totalDelive.length,
@@ -139,6 +140,7 @@ const delivered = async (req, res) => {
     })
     res.render("admin/order/order-delivered", {
         orders, 
+        moment,
         orderRemove,
         totalPrepare: totalPrepare.length, 
         totalTransport: totalTransport.length,

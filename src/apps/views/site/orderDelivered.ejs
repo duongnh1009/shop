@@ -13,8 +13,8 @@
                                 Tình trạng đơn hàng
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/orderUser">Đang chuẩn bị</a>
                                 <a class="dropdown-item" href="/orderTransport">Đang giao hàng</a>
-                                <a class="dropdown-item" href="/orderDelivered">Đã giao hàng</a>
                             </div>
                         </li>
                     </ul>
@@ -23,7 +23,7 @@
             <%if(orders.length < 1) {%>
                 <h3>Không có sản phẩm nào !</h3>
             <%} else {%>
-                <h3>Đơn hàng đang chuẩn bị</h3>
+                <h3>Đơn hàng đã giao</h3>
                 <div class="row">
                     <div class="cart-nav-item col-lg-9 col-md-9 col-sm-12">Thông tin sản phẩm</div> 
                     <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>    

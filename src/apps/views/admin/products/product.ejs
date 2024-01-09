@@ -62,7 +62,7 @@
                                             <td><%=parseInt(product.price).toLocaleString('en-us')%> đ</td>
                                         <%}%>
                                         <td style="text-align: center"><img width="150" height="150" src="/static/images/<%=product.thumbnail%>" /></td>
-                                        <td><span class="label label-<%=product.is_stock==='Còn hàng'?'success':'danger'%>"><%=product.is_stock%></span></td>
+                                        <td><span class="label label-<%=product.is_stock==='Còn hàng'?'primary':'danger'%>"><%=product.is_stock%></span></td>
                                         <td><%=product.cat_id.title%></td>
                                         <td class="form-group">
                                             <a href="/admin/product/edit/<%=product._id%>" class="btn btn-primary">Thay đổi</a>

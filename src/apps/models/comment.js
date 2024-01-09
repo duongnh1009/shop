@@ -13,6 +13,10 @@ const commentSchema = mongoose.Schema({
         ref: 'Product',
     },
 
+    slug: {
+        type: String
+    },
+
     fullName: {
         type: String
     },

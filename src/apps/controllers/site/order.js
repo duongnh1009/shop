@@ -45,12 +45,35 @@ const orderBuy = async (req, res) => {
 
 const orderUser = async(req, res) => {
     const userSiteId = req.session.userSiteId; // Sử dụng session để lấy userSiteId
-    const orders = await orderModel.find({ userSiteId });
+    const orders = await orderModel.find({ 
+        userSiteId,
+        status: "Đang chuẩn bị" 
+    });
     res.render('site/orderUser', { orders });
+}
+
+const orderTransport = async(req, res) => {
+    const userSiteId = req.session.userSiteId; // Sử dụng session để lấy userSiteId
+    const orders = await orderModel.find({ 
+        userSiteId,
+        status: "Đang giao" 
+    });
+    res.render('site/orderTransport', { orders });
+}
+
+const orderDelivered = async(req, res) => {
+    const userSiteId = req.session.userSiteId; // Sử dụng session để lấy userSiteId
+    const orders = await orderModel.find({ 
+        userSiteId,
+        status: "Đã giao" 
+    });
+    res.render('site/orderDelivered', { orders });
 }
 
 module.exports = {
     order,
     orderBuy,
-    orderUser
+    orderUser,
+    orderTransport,
+    orderDelivered
 }

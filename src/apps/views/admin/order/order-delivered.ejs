@@ -50,9 +50,10 @@
 		
 									<thead>
 									<tr>
+										<th>Tên tài khoản</th>
+                                        <th>Email đăng kí</th>
 										<th>Tên khách hàng</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Địa chỉ</th>
+										<th>Thời gian đặt hàng</th>
 										<th>Hành động</th>
 									</tr>
 									</thead>
@@ -60,9 +61,10 @@
 										<%for(order of orders) {%>
 											<tr>
 												
+												<td><%=order.fullNameSite%></td>
+                                                <td><%=order.emailSite%></td>
 												<td><%=order.name%></td>
-                                                <td><%=order.phone%></td>
-                                                <td><%=order.address%></td>
+												<td><%=moment(order.createdAt).format('DD/MM/YYYY')%></td>
 												<td class="form-group">
 													<a href="/admin/order/detail/<%=order._id%>" class="btn btn-primary">Xem chi tiết</a>
 													<a href="" class="btn btn-danger" data-toggle="modal" data-id="<%=order._id%>" data-target="#delete-item">Xóa</a>

@@ -52,6 +52,7 @@
 									<tr>
 										<th>Tên tài khoản</th>
                                         <th>Email đăng kí</th>
+										<th>Tên khách hàng</th>
 										<th>Thời gian đặt hàng</th>
 										<th>Hành động</th>
 									</tr>
@@ -61,6 +62,7 @@
 											<tr>
 												<td><%=order.fullNameSite%></td>
                                                 <td><%=order.emailSite%></td>
+												<td><%=order.name%></td>
 												<td><%=moment(order.createdAt).format('DD/MM/YYYY')%></td>
 												<td class="form-group">
 													<a href="/admin/order/detail/<%=order._id%>" class="btn btn-primary">xem chi tiết</a>

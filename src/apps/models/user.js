@@ -31,10 +31,7 @@ const userSchema = mongoose.Schema({
     isLocked: { 
         type: Boolean, 
         default: false 
-    },
-
-    sessionIds: [String],
-    
+    },    
 }, {
     timestamps: true
 });

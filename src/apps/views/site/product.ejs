@@ -64,13 +64,13 @@
 
             <div class="product-comment col-lg-12">
                 <%if(!userSiteId) { %>
-                    <h3>Bình luận sản phẩm (bạn cần đăng nhập !)</h3>
+                    <h3>Bình luận sản phẩm (bạn cần phải đăng nhập !)</h3>
                 <%} else { %>
                     <h3>Bình luận sản phẩm</h3>
                     <form method="post">
                         <div class="form-group">
                             <label>Nội dung:</label>
-                            <textarea name="content" required rows="8" class="form-control"></textarea>     
+                            <textarea name="content" required rows="4" class="form-control"></textarea>     
                         </div>
                         <button type="submit" name="sbm" class="btn btn-primary">Gửi</button>
                     </form> 
@@ -84,9 +84,13 @@
                     <%for(comment of comments) { %>
                         <div class="comment-item">
                             <div>
-                                <p class="comment-fullName"><%=comment.fullNameSite%></p>
-                                <p><%=moment(comment.createdAt).format('DD/MM/YYYY')%></p>
+                                <p class="comment-fullName"><%=comment.fullNameSite%> - <%=moment(comment.createdAt).format('DD/MM/YYYY')%></p>
                                 <p><%=comment.content%></p>
+                                <% if(comment.userSiteId === userSiteId) {%>
+                                    <a href="/product-<%=product.slug%>.<%=product._id%>/editComment-<%=comment._id%>">chỉnh sửa |</a>
+                                    <a href="/commentRemove-<%=comment._id%>">xóa</a>
+                                <%}%>
+                                <p></p>
                             </div> 
                         </div>
                     <%}%>

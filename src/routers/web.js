@@ -30,6 +30,20 @@ router.get('/admin/login', authController.getLogin)
 router.post('/admin/login', authController.postLogin)
 router.get('/admin/logout', authController.logout)
 
+//router admin-register
+router.get('/admin/register', authController.register)
+router.post('/admin/register', authController.registerStore)
+
+//router admin-changePass
+router.get('/admin/changePass',authMiddleware.checkLogin, authController.changePassword)
+router.post('/admin/changePass',authMiddleware.checkLogin, authController.updatePass)
+
+//router admin-forgotPass
+router.get('/admin/forgotPass', authController.forgotPass)
+router.post('/admin/forgotPass', authController.forgotCode)
+router.get("/admin/resetPass-:token", authController.resetPass);
+router.post("/admin/resetPass-:token", authController.resetUpdate);
+
 //router admin-dashboard
 router.get('/admin/dashboard',authMiddleware.checkLogin, adminController.index)
 
@@ -60,10 +74,6 @@ router.get('/admin/search/category',authMiddleware.checkLogin, categoryControlle
 //router admin-user
 router.get('/admin/user',authMiddleware.checkLogin, userController.index)
 router.get('/admin/user/trash',authMiddleware.checkLogin, userController.trash)
-router.get('/admin/user/create',authMiddleware.checkLogin, userController.create)
-router.post('/admin/user/create',authMiddleware.checkLogin, userController.store)
-router.get('/admin/user/edit/:id',authMiddleware.checkLogin, userController.edit)
-router.post('/admin/user/edit/:id',authMiddleware.checkLogin, userController.update)
 router.patch('/admin/user/restore/:id',authMiddleware.checkLogin, userController.restore)
 router.delete('/admin/user/delete/:id',authMiddleware.checkLogin, userController.remove)
 router.delete('/admin/user/force/:id',authMiddleware.checkLogin, userController.force)
@@ -101,6 +111,9 @@ router.get("/",authMiddleware.checkLoginSite, homeController.home);
 router.get("/category-:slug.:id",authMiddleware.checkLoginSite, categorySiteController.category)
 router.get("/product-:slug.:id",authMiddleware.checkLoginSite, productSiteController.product)
 router.post("/product-:slug.:id",authMiddleware.checkLoginSite, commentSiteController.comment)
+router.get("/product-:slug.:id/editComment-:id",authMiddleware.checkLoginSite, commentSiteController.editComment)
+router.post("/product-:slug.:id/editComment-:id",authMiddleware.checkLoginSite, commentSiteController.updateComment)
+router.get("/commentRemove-:id",authMiddleware.checkLoginSite, commentSiteController.removeComment)
 router.get("/search",authMiddleware.checkLoginSite, searchSiteController.search)
 router.post("/add-to-cart",authMiddleware.checkLoginSite, cartSiteSController.addToCart)
 router.get("/cart",authMiddleware.checkLoginSite, cartSiteSController.cart)
@@ -120,6 +133,8 @@ router.post("/resetPassword-:token", authSiteController.resetUpdate);
 router.get("/order",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.order)
 router.post("/order-buy", orderSiteController.orderBuy)
 router.get("/orderUser",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.orderUser)
+router.get("/orderTransport",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.orderTransport)
+router.get("/orderDelivered",authMiddleware.checkLoginSite, authMiddleware.backLogin, orderSiteController.orderDelivered)
 router.get("/success",authMiddleware.checkLoginSite, authMiddleware.backLogin, successSiteController.success)
 
 module.exports = router;
