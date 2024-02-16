@@ -24,7 +24,7 @@ const product = async (req, res) => {
             $ne: productById.id
         }
     })
-    res.render("site/product", {productById, comments, products, authors, moment})
+    res.render("site/product/product", {productById, comments, products, authors, moment})
 }
 
 module.exports = {

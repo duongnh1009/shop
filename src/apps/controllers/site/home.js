@@ -15,7 +15,7 @@ const home = async (req, res) => {
           productsByCategory[category.title] = products;
         }
     }
-    res.render("site", {productsByCategory})
+    res.render("site/home/index", {productsByCategory})
 }
 
 module.exports = {

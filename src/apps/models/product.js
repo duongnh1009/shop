@@ -19,26 +19,6 @@ const productSchema = mongoose.Schema({
         type: String
     },
 
-    publishing: {
-        type: String
-    },
-
-    publication_date: {
-        type: String
-    },
-
-    release: {
-        type: String
-    },
-
-    number_pages: {
-        type: Number
-    },
-
-    weight: {
-        type: Number
-    },
-
     description: {
         type: String,
     },
@@ -66,6 +46,10 @@ const productSchema = mongoose.Schema({
     },
 
     promotion: {
+        type: String,       
+    },
+
+    details: {
         type: String,       
     },
 

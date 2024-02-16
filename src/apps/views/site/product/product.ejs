@@ -1,7 +1,7 @@
-<%- include("./layout/head", {title:"product"})%>
-<%- include("./layout/header")%>
-<%- include("./layout/menu")%>
-<%- include("./layout/slider")%>
+<%- include("../layout/head", {title:"product"})%>
+<%- include("../layout/header")%>
+<%- include("../layout/menu")%>
+<%- include("../layout/slider")%>
 
 <body>
 
@@ -50,11 +50,7 @@
 
             <div class="product-information col-lg-12">
                 <h3>THÔNG TIN CHI TIẾT</h3>
-                <li>Nhà xuất bản: <span><%=productById.publishing%></span></li>
-                <li>Ngày xuất bản: <%=productById.publication_date%></li>
-                <li>Nhà phát hành: <span><%=productById.release%></span></li>
-                <li>Số trang: <%=productById.number_pages%> trang</li>
-                <li>Trọng lượng: <%=productById.weight%> gram</li>
+                <li><%-productById.details%></li>
             </div>
 
             <div class="product-intro col-lg-12">
@@ -153,7 +149,7 @@
         </div>
     </div>
 
-    <%- include("./layout/footer")%>
+    <%- include("../layout/footer")%>
 
     <script>
         function decreaseQuantity() {

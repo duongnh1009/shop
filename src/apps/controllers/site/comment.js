@@ -20,7 +20,7 @@ const comment = async(req, res) => {
 const editComment = async(req, res) => {
     const commentId = req.params.id;
     const comment = await commentModel.findById(commentId)
-    res.render("site/editComment", {comment})
+    res.render("site/product/editComment", {comment})
 }
 
 const updateComment = async(req, res) => {

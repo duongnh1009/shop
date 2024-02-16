@@ -24,7 +24,7 @@ const search = async (req, res) => {
             { cat_id: { $in: await categoryModel.find({ title: { $regex: new RegExp(keyword, 'i') } }).distinct('_id') } },
         ],
     }).skip(skip).limit(limit)
-    res.render("site/search", {
+    res.render("site/search/search", {
         searchProducts, 
         keyword,
         page,

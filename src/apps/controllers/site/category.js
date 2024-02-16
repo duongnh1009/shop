@@ -19,7 +19,7 @@ const category = async (req, res) => {
     const products = await productModel.find({
         cat_id: id
     }).sort({_id: -1}).skip(skip).limit(limit)
-    res.render("site/category", {
+    res.render("site/category/category", {
         category, 
         products,
         page,

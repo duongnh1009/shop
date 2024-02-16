@@ -1,11 +1,12 @@
-<%- include("./layout/head", {title:"Home"})%>
-<%- include("./layout/header")%>
-<%- include("./layout/menu")%>
+<%- include("../layout/head", {title:"Home"})%>
+<%- include("../layout/header")%>
+<%- include("../layout/menu")%>
+<%- include("../layout/slider")%>
 
 <body>
     
 
-            <div id="customer">
+            <div style="margin-top: 40px;" id="customer" class="col-lg-12">
                 <h3>ĐỊA CHỈ GIAO HÀNG</h3>
                 <form method="POST" action="/order-buy">
                     <div class="container2">
@@ -42,6 +43,6 @@
         </div>
     </div>
 
-    <%- include("./layout/footer")%>
+    <%- include("../layout/footer")%>
 </body>
 </html>

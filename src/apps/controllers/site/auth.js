@@ -6,7 +6,7 @@ const transporter = require("../../../common/transporter");
 
 const login = (req, res) => {
     let error = '';
-    res.render("site/login", {error})
+    res.render("site/auth/login", {error})
 }
 
 const postLogin = async(req, res) => {
@@ -15,17 +15,17 @@ const postLogin = async(req, res) => {
     const user = await userModel.findOne({ email });
     if (!user) {
         error = "Tài khoản không tồn tại !"
-        return res.render("site/login", {error});
+        return res.render("site/auth/login", {error});
     }
 
     else if(!(await bcryptjs.compare(password, user.password))) {
         error = "Mật khẩu không chính xác !"
-        return res.render("site/login", {error});
+        return res.render("site/auth/login", {error});
     }
 
     else if(user.isLocked) {
         error = "Tài khoản của bạn đã bị khóa !";
-        return res.render("site/login", {error});
+        return res.render("site/auth/login", {error});
     }
 
     //luu thong tin tai khoan vao session
@@ -43,7 +43,7 @@ const Logout = (req, res) => {
 
 const register = (req, res) => {
     let error = ''
-    res.render("site/register", {error})
+    res.render("site/auth/register", {error})
 }
 
 const registerStore = async(req, res) => {
@@ -90,14 +90,14 @@ const registerStore = async(req, res) => {
         req.flash('success', 'Đăng kí thành công !');
         res.redirect("/register")
     }
-    res.render("site/register", {error})
+    res.render("site/auth/register", {error})
 }
 
 
 //cap nhat mat khau
 const changePassword = (req, res) => {
     let error = ''
-    res.render("site/changePassword", {error})
+    res.render("site/auth/changePassword", {error})
 }
 
 const updatePass = async(req, res) => {
@@ -124,13 +124,13 @@ const updatePass = async(req, res) => {
         req.flash('success', 'Đổi mật khẩu thành công !');
         res.redirect('/changePassword')
     }
-    return res.render('site/changePassword', {error});
+    return res.render('site/auth/changePassword', {error});
 }
 
 //quen mat khau
 const forgotPass = (req, res) => {
     let error = ''
-    res.render("site/forgotPass", {error})
+    res.render("site/auth/forgotPass", {error})
 }
 
 const forgotCode = async(req, res) => {
@@ -161,7 +161,7 @@ const forgotCode = async(req, res) => {
         req.flash('success', 'Vui lòng kiểm tra email !');
         res.redirect('/forgotPassword')
     }
-    res.render("site/forgotPass", {error});
+    res.render("site/auth/forgotPass", {error});
 }
 
 const resetPass = async(req, res) => {
@@ -172,10 +172,10 @@ const resetPass = async(req, res) => {
     });
   
     if (!user) {
-        return res.render('site/invalidToken');
+        return res.render('site/auth/invalidToken');
     }
   
-    res.render('site/resetPass', {error, token: req.params.token });
+    res.render('site/auth/resetPass', {error, token: req.params.token });
 }
 
 const resetUpdate = async(req, res) => {
@@ -187,7 +187,7 @@ const resetUpdate = async(req, res) => {
     });
 
     if (!user) {
-        return res.render('site/invalidToken');
+        return res.render('site/auth/invalidToken');
     }
   
     if(newPassword.length < 6) {
@@ -206,9 +206,9 @@ const resetUpdate = async(req, res) => {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         await user.save();
-        res.render("site/passUpdate");
+        res.render("site/auth/passUpdate");
     }
-    res.render("site/resetPass", {error})
+    res.render("site/auth/resetPass", {error})
 }
 
 module.exports = {

@@ -30,7 +30,7 @@ const addToCart = async (req, res) => {
 
 const cart = (req, res) => {
     const cart = req.session.cart
-    res.render("site/cart", {cart})
+    res.render("site/cart/cart", {cart})
 }
 
 const updateCart = (req, res) => {

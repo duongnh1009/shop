@@ -17,7 +17,7 @@ const index = async (req, res) => {
     const hasPrev = page > 1 ? true : false;
     const products = await productModel.find()
         .sort({_id:-1})
-        .populate({path: "cat_id"})
+        .populate("cat_id")
         .skip(skip)
         .limit(limit)
     const productRemove = await productModel.countWithDeleted({
@@ -69,8 +69,7 @@ const create = async (req, res) => {
 }
 
 const store = async (req, res) => {
-    const {name, price, sale, author, translator, publishing, 
-        publication_date, release, number_pages, weight, promotion, cat_id, is_stock, description} = req.body;
+    const {name, price, sale, author, translator, promotion, details, cat_id, is_stock, description} = req.body;
     const {file} = req;
     let error = '';
     const products = await productModel.findOne({
@@ -82,11 +81,7 @@ const store = async (req, res) => {
         sale,
         author,
         translator,
-        publishing,
-        publication_date,
-        release,
-        number_pages,
-        weight,
+        details,
         promotion,
         cat_id,
         is_stock,
@@ -120,8 +115,7 @@ const edit = async (req, res) => {
 
 const update = async (req, res) => {
     const id = req.params.id;
-    const {name, price, sale, author, translator, publishing, 
-        publication_date, release, number_pages, weight, promotion, cat_id, is_stock, description} = req.body;
+    const {name, price, sale, author, translator, promotion, details, cat_id, is_stock, description} = req.body;
     const {file} = req;
     let error = ''
     const products = await productModel.findOne({
@@ -134,11 +128,7 @@ const update = async (req, res) => {
         sale,
         author,
         translator,
-        publishing,
-        publication_date,
-        release,
-        number_pages,
-        weight,
+        details,
         promotion,
         cat_id,
         is_stock,

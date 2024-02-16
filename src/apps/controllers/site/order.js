@@ -1,10 +1,7 @@
-const ejs = require("ejs");
-const path = require("path");
 const orderModel = require("../../models/order")
-const transporter = require("../../../common/transporter");
 
 const order = (req, res) => {
-    res.render("site/order")
+    res.render("site/order/order")
 }
 
 const orderBuy = async (req, res) => {
@@ -21,24 +18,6 @@ const orderBuy = async (req, res) => {
         items,
     }
     new orderModel(orderList).save();
-    
-    const html = await ejs.renderFile(
-        path.join(req.app.get("views"), "site/email-order.ejs"),
-        {
-            name,
-            phone,
-            mail,
-            address,
-            items
-        }
-    );
-
-    await transporter.sendMail({
-        to: mail,
-        from: "D - SHOP",
-        subject: "Xác nhận đơn hàng từ D - SHOP",
-        html
-    });
     req.session.cart = [];
     res.redirect("/success")
 }
@@ -49,7 +28,7 @@ const orderUser = async(req, res) => {
         userSiteId,
         status: "Đang chuẩn bị" 
     });
-    res.render('site/orderUser', { orders });
+    res.render('site/order/orderUser', { orders });
 }
 
 const orderTransport = async(req, res) => {
@@ -58,7 +37,7 @@ const orderTransport = async(req, res) => {
         userSiteId,
         status: "Đang giao" 
     });
-    res.render('site/orderTransport', { orders });
+    res.render('site/order/orderTransport', { orders });
 }
 
 const orderDelivered = async(req, res) => {
@@ -67,7 +46,7 @@ const orderDelivered = async(req, res) => {
         userSiteId,
         status: "Đã giao" 
     });
-    res.render('site/orderDelivered', { orders });
+    res.render('site/order/orderDelivered', { orders });
 }
 
 module.exports = {

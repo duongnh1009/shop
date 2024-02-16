@@ -52,35 +52,18 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Nhà xuất bản</label>
-                                        <input name="publishing" type="text" value="<%=products.publishing%>" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Ngày xuất bản</label>
-                                        <input name="publication_date" type="text" value="<%=products.publication_date%>" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Nhà phát hành</label>
-                                        <input name="release" type="text" value="<%=products.release%>" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Số trang</label>
-                                        <input name="number_pages" type="number" value="<%=products.number_pages%>" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Trọng lượng</label>
-                                        <input name="weight" type="number" value="<%=products.weight%>" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
                                         <label>Thông tin khuyến mãi</label>
                                         <textarea name="promotion" class="form-control" rows="3"><%=products.promotion%></textarea>
                                         <script>
                                             CKEDITOR.replace('promotion');
+                                        </script>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Thông tin chi tiết</label>
+                                        <textarea name="details" class="form-control" rows="3"><%=products.details%></textarea>
+                                        <script>
+                                            CKEDITOR.replace('details');
                                         </script>
                                     </div>
                                 </div>

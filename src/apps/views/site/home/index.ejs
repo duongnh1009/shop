@@ -1,8 +1,8 @@
-<%- include("./layout/head", {title:"Home"})%>
-<%- include("./layout/header")%>
-<%- include("./layout/menu")%>
-<%- include("./layout/slider")%>
-<%- include("./layout/banner")%>
+<%- include("../layout/head", {title:"Home"})%>
+<%- include("../layout/header")%>
+<%- include("../layout/menu")%>
+<%- include("../layout/slider")%>
+<%- include("../layout/banner")%>
 
 <body>
         <% for(category in productsByCategory) { %>
@@ -34,6 +34,6 @@
         </div>
     </div>
 
-            <%- include("./layout/footer")%>
+            <%- include("../layout/footer")%>
 </body>
 </html>

@@ -66,6 +66,7 @@
 
 .product-promotion p {
     font-size: 14px;
+    margin-top: -10px;
 }
 
 .product-information h3 {
@@ -77,8 +78,8 @@
 }
 
 .product-information li {
-    margin-left: 10px;
     margin-top: 10px;
+    margin-left: -14px;
     font-size: 14px;
     list-style: none;
 }
